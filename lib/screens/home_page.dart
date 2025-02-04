@@ -1,7 +1,9 @@
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:padmakanya_api/models/post.dart';
 import 'package:padmakanya_api/widgets/post_tile.dart';
 
 class Homepage extends StatefulWidget {
@@ -12,7 +14,7 @@ class Homepage extends StatefulWidget {
 }
 
 class _HomepageState extends State<Homepage> {
-  List<dynamic> posts = [];
+  List<Post> posts = [];
 
   @override
   void initState() {
@@ -27,12 +29,17 @@ class _HomepageState extends State<Homepage> {
     if (response.statusCode == 200) {
       String responseBody = response.body;
       List<dynamic> decodedPosts = jsonDecode(responseBody);
-      print(decodedPosts);
+      List<Post> convertedPosts = decodedPosts.map((element) {
+        Map<String, dynamic> data = element as Map<String, dynamic>;
+        Post post = Post.fromMap(data);
+        return post;
+      }).toList();
+
       setState(() {
-        posts = decodedPosts;
+        posts = convertedPosts;
       });
     } else {
-      print("Error Occurd");
+      log("Error Occurd");
     }
   }
 
@@ -47,7 +54,7 @@ class _HomepageState extends State<Homepage> {
           padding: const EdgeInsets.symmetric(horizontal: 16),
           separatorBuilder: (_, __) => const SizedBox(height: 10),
           itemBuilder: (BuildContext context, int index) {
-            Map<String, dynamic> post = posts[index] as Map<String, dynamic>;
+            Post post = posts[index];
             return PostTile(
               post: post,
             );
