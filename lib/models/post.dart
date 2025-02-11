@@ -1,25 +1,19 @@
 class Post {
   final int id;
   final String title;
-  final String description;
+  final String thumbnailUrl;
 
   Post({
     required this.id,
     required this.title,
-    required this.description,
+    required this.thumbnailUrl,
   });
 
   factory Post.fromMap(Map<String, dynamic> map) {
     return Post(
       id: map['id'],
       title: map['title'],
-      description: map['body'],
+      thumbnailUrl: map['url'],
     );
   }
 }
-
-Post post = Post(
-  id: 1,
-  title: "Hello",
-  description: "descrption",
-);

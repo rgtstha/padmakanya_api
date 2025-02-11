@@ -1,7 +1,6 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:padmakanya_api/models/post.dart';
+import 'package:padmakanya_api/screens/post_detail_page.dart';
 
 class PostTile extends StatelessWidget {
   const PostTile({
@@ -15,8 +14,15 @@ class PostTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        log("Item tapped");
-        // navigate to post detail screen
+        Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (BuildContext context) {
+              return PostDetailPage(
+                post: post,
+              );
+            },
+          ),
+        );
       },
       child: Container(
         padding: const EdgeInsets.symmetric(
@@ -38,6 +44,14 @@ class PostTile extends StatelessWidget {
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  Image.network(
+                    post.thumbnailUrl,
+                    height: 200,
+                    width: double.infinity,
+                    errorBuilder: (_, __, ___) {
+                      return const Icon(Icons.error);
+                    },
+                  ),
                   Text(
                     post.title,
                     maxLines: 1,
@@ -45,13 +59,6 @@ class PostTile extends StatelessWidget {
                       fontSize: 18,
                       overflow: TextOverflow.ellipsis,
                       fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                  Text(
-                    post.description,
-                    maxLines: 2,
-                    style: const TextStyle(
-                      overflow: TextOverflow.ellipsis,
                     ),
                   ),
                 ],
